@@ -1,0 +1,103 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+#define MAX_SIZE 100
+
+// Structure to represent the static stack
+struct Stack {
+    char data[MAX_SIZE];
+    int top;
+};
+
+// Function to initialize the stack
+void initializeStack(struct Stack *stack) {
+    stack->top = -1;
+}
+
+// Function to check if the stack is empty
+bool isEmpty(struct Stack *stack) {
+    return stack->top == -1;
+}
+
+// Function to check if the stack is full
+bool isFull(struct Stack *stack) {
+    return stack->top == MAX_SIZE - 1;
+}
+
+// Function to push a character onto the stack
+void push(struct Stack *stack, char element) {
+    if (isFull(stack)) {
+        printf("Stack overflow\n");
+        return;
+    }
+
+    stack->data[++stack->top] = element;
+}
+
+// Function to pop a character from the stack
+char pop(struct Stack *stack) {
+    if (isEmpty(stack)) {
+        printf("Stack underflow\n");
+        return '\0'; // Returning a placeholder value for an empty stack
+    }
+
+    return stack->data[stack->top--];
+}
+
+// Function to count and remove vowels from the stack
+int countAndRemoveVowels(struct Stack *stack) {
+    int count = 0;
+
+    // Temporary stack to store non-vowel elements
+    struct Stack tempStack;
+    initializeStack(&tempStack);
+
+    // Count and remove vowels from the original stack
+    while (!isEmpty(stack)) {
+        char element = pop(stack);
+        if (element == 'a' || element == 'e' || element == 'i' || element == 'o' || element == 'u' ||
+            element == 'A' || element == 'E' || element == 'I' || element == 'O' || element == 'U') {
+            count++;
+        } else {
+            push(&tempStack, element);
+        }
+    }
+
+    // Restore the non-vowel elements back to the original stack
+    while (!isEmpty(&tempStack)) {
+        push(stack, pop(&tempStack));
+    }
+
+    return count;
+}
+
+int main() {
+    struct Stack myStack;
+    initializeStack(&myStack);
+
+    // Push elements onto the stack
+    push(&myStack, 'a');
+    push(&myStack, 'b');
+    push(&myStack, 'e');
+    push(&myStack, 'i');
+    push(&myStack, 'c');
+    push(&myStack, 'o');
+    push(&myStack, 'd');
+    push(&myStack, 'u');
+
+    printf("Original Stack:\n");
+    while (!isEmpty(&myStack)) {
+        printf("%c ", pop(&myStack));
+    }
+
+    int vowelCount = countAndRemoveVowels(&myStack);
+
+    printf("\nVowels Removed. Remaining Stack:\n");
+    while (!isEmpty(&myStack)) {
+        printf("%c ", pop(&myStack));
+    }
+
+    printf("\nCount of Removed Vowel Characters: %d\n", vowelCount);
+
+    return 0;
+}
