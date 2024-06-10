@@ -1,0 +1,72 @@
+#include <stdio.h>
+
+#define MAX_SIZE 10
+
+// Structure to represent the stack
+struct Stack {
+    int arr[MAX_SIZE];
+    int top;
+};
+
+// Function to initialize the stack
+void initialize(struct Stack *stack) {
+    stack->top = -1;
+}
+
+// Function to check if the stack is full
+int isFull(struct Stack *stack) {
+    return stack->top == MAX_SIZE - 1;
+}
+
+// Function to check if the stack is empty
+int isEmpty(struct Stack *stack) {
+    return stack->top == -1;
+}
+
+// Function to add an element to the stack
+void push(struct Stack *stack, int element) {
+    if (isFull(stack)) {
+        printf("Stack Overflow! Cannot push %d\n", element);
+        return;
+    }
+    
+    stack->arr[++stack->top] = element;
+    printf("%d pushed to the stack\n", element);
+}
+
+// Function to remove an element from the stack
+void pop(struct Stack *stack) {
+    if (isEmpty(stack)) {
+        printf("Stack Underflow! Cannot pop from an empty stack\n");
+        return;
+    }
+    
+    int poppedElement = stack->arr[stack->top--];
+    printf("%d popped from the stack\n", poppedElement);
+}
+
+// Function to count the number of elements in the stack
+void countElements(struct Stack *stack) {
+    printf("Number of elements in the stack: %d\n", stack->top + 1);
+}
+
+int main() {
+    struct Stack stack;
+    initialize(&stack);
+
+    push(&stack, 5);
+    push(&stack, 10);
+    push(&stack, 15);
+
+    countElements(&stack);
+
+    pop(&stack);
+    countElements(&stack);
+
+    pop(&stack);
+    pop(&stack);
+
+    countElements(&stack);
+
+    return 0;
+}
